@@ -175,7 +175,7 @@ bottom: 0;*/
         <div id="map"></div>
         <div id="ui">
             <h5>Hoover over city point for more information.
-                <br><span></span></h5>
+                <br></h5>
             <div id="marker-hover-text"></div>
             <ul id="legend-list"></ul>
         </div>
@@ -273,8 +273,9 @@ bottom: 0;*/
                         // Create Leaflet event listener to add text to specified HTML element on mouseover/hover and mouseout
                         layer.on({
                             mouseover: function (e) {
-                                markerHoverTextEl.innerText = feature.properties
-                                    .description
+                                markerHoverTextEl.innerHTML = "<h4>" + feature.properties
+                                    .city + "</h4>" +
+                                    feature.properties.description
                             },
                             mouseout: function (e) {
                                 markerHoverTextEl.innerText = ""
