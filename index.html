@@ -272,12 +272,13 @@ bottom: 0;*/
 
                         // Create Leaflet event listener to add text to specified HTML element on mouseover/hover and mouseout
                         layer.on({
-                            mouseover: function () {
+                            mouseover: function (e) {
                                 markerHoverTextEl.innerText = feature.properties
                                     .description
                             },
-                            mouseout: function () {
+                            mouseout: function (e) {
                                 markerHoverTextEl.innerText = ""
+                                e.target.setIcon(altIcon_black)
                             },
                             mousemove: function (e) {
                                 e.target.setIcon(altIcon_red)
