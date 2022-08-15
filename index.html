@@ -174,8 +174,9 @@ bottom: 0;*/
     <div class="container">
         <div id="map"></div>
         <div id="ui">
-            <h3>popup text to appear here
-                <br><span></span></h3>
+            <h5>Hoover over city point for more information.
+                <br><span></span></h5>
+            <div id="marker-hover-text"></div>
             <ul id="legend-list"></ul>
         </div>
     </div>
@@ -268,20 +269,32 @@ bottom: 0;*/
                             }).openTooltip();
 
                         //layer.bindPopup(feature.properties.description);
-                        layer.bindPopup(feature.properties.description);
+                        /*                      layer.bindPopup(feature.properties.description);
 
-                        layer.on('mouseover', function (e) {
-                            $('#text-' + feature.properties.city).addClass('highlight');
-                            //console.log(e);
-                            e.target.setIcon(altIcon_red)
-                            this.openPopup();
-                        });
-                        layer.on('mouseout', function (e) {
-                            e.target.setIcon(altIcon_black)
-                            this.closePopup();
-                        });
+                                              layer.on('mouseover', function (e) {
+                                                  $('#text-' + feature.properties.city).addClass('highlight');
+                                                  //console.log(e);
+                                                  e.target.setIcon(altIcon_red)
+                                                  this.openPopup();
+                                              });
+                                              layer.on('mouseout', function (e) {
+                                                  e.target.setIcon(altIcon_black)
+                                                  this.closePopup();
+                                              }); */
+                        // Define the HTML element where you want to add text
+                        const markerHoverTextEl = document.getElementById("marker-hover-text");
 
+                        // Create Leaflet event listener to add text to specified HTML element on mouseover/hover and mouseout
+                        layer.on({
+                            mouseover: function () {
+                                markerHoverTextEl.innerText = feature.properties.description
+                            },
+                            mouseout: function () {
+                                markerHoverTextEl.innerText = ""
+                            }
+                        });
                     }
+
 
                 }).addTo(map);
                 var featureGroup = L.featureGroup(marker)
