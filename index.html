@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset=utf-8 />
+    <title>Add styles made with Mapbox Studio to a Leaflet map</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.mapbox.com/mapbox.js/v3.3.1/mapbox.js'></script>
+    <link href='https://api.mapbox.com/mapbox.js/v3.3.1/mapbox.css' rel='stylesheet' />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            border-bottom: 1px solid white;
+            font-size: 2.5em;
+        }
+
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            background: rgb(0, 0, 0);
+            /*set the background to a black*/
+        }
+
+        #map {
+            /*position: absolute;
+width: 100%;
+top: 0;
+bottom: 0;*/
+            background: rgba(241, 239, 239, 0.75);
+            width: 800px;
+            height: 600px;
+            margin: 10px;
+            border: 1px solid #d3d3d3;
+            float: left;
+        }
+
+        h1 {
+            width: 960px;
+            margin: 18px auto 18px auto;
+            font-weight: normal;
+            color: #9a9898;
+            font-family: 'hojas_de_plataregular'
+        }
+
+        #main {
+            width: 1000px;
+            margin: 18px auto 18px auto;
+        }
+
+        #main p {
+            font-size: 0.98em;
+            font-weight: 80;
+            color: #fffcfb;
+            line-height: 1.3em;
+            columns: 1;
+            column-gap: 4em;
+            column-rule: 1px dashed #dadada;
+        }
+
+        #main ul {
+            color: white;
+        }
+
+        #main li {
+            margin-bottom: 12px;
+        }
+
+        #main a {
+            color: rgb(184, 187, 190);
+        }
+
+        #footer {
+            width: 960px;
+            margin: 18px auto 18px auto;
+        }
+
+        #footer p {
+            font-size: .8em;
+            font-weight: 80;
+            color: #fffcfb;
+            line-height: 1.3em;
+            columns: 1;
+            column-gap: 4em;
+            column-rule: 1px dashed #dadada;
+        }
+
+        #footer a {
+            color: rgb(184, 187, 190);
+        }
+
+        #ui {
+            height: 590px;
+            width: 300px;
+            z-index: 1000;
+            padding: 6px 12px;
+            background: rgba(235, 235, 235, .9);
+            font-size: 1em;
+            margin: 10px;
+        }
+
+        #ui ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #ui li {
+            margin-bottom: 6px;
+        }
+
+        #ui a {
+            text-decoration: none;
+        }
+
+        #ui a:hover {
+            font-weight: bold;
+        }
+
+        .highlight {
+            font-weight: bold;
+        }
+
+        .tooltip {
+            background: rgba(241, 239, 239, 0.897);
+            color: rgb(48, 5, 5);
+            font-size: 1em;
+            width: 100px;
+            white-space: normal;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            border: .5px solid rgb(65, 58, 58);
+            border-radius: 4px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            /* make main axis horizontal (default setting) */
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            margin: 0px;
+
+        }
+
+        .leaflet-tooltip.my-labels {
+            background-color: transparent;
+            border: transparent;
+            box-shadow: none;
+            font-size: 1.3em;
+        }
+
+        /* hide the tip of the tooltip to prevent pointer on top of icon */
+        .leaflet-tooltip-right:before {
+            border: 0px solid transparent;
+        }
+
+        /* hide the tip of the tooltip to prevent pointer on top of icon */
+        .leaflet-tooltip-left:before {
+            border: 0px solid transparent;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>
+            <center>Ancient Aztec Cities</center>
+        </h1>
+    </header>
+    <div class="container">
+        <div id="map"></div>
+        <div id="ui">
+            <h3>popup text to appear here
+                <br><span></span></h3>
+            <ul id="legend-list"></ul>
+        </div>
+    </div>
+    <hr>
+    <div id="main">
+        <p>The Aztecs (/ˈæztɛks/) were a Mesoamerican culture that flourished in central Mexico in the post-classic
+            period from 1300 to 1521. The Aztec people included different ethnic groups of central Mexico, particularly
+            those groups who spoke the Nahuatl language and who dominated large parts of Mesoamerica from the 14th to
+            the 16th centuries. Aztec culture was organized into city-states (altepetl), some of which joined to form
+            alliances, political confederations, or empires. The Aztec Empire was a confederation of three city-states
+            established in 1427: Tenochtitlan, city-state of the Mexica or Tenochca; Texcoco; and Tlacopan, previously
+            part of the Tepanec empire, whose dominant power was Azcapotzalco.
+        </p>
+    </div>
+    <div id="footer">
+        <p style="float: left; width: 50%; text-align: left;">Map designed by:&nbsp;&nbsp;Mark Cruse </p>
+        <p style="float: left; width: 50%; text-align: right;">Data source:
+            <a href="http://opendata-esri23.opendata.arcgis.com/">Esri Portland R&D Center Open Data</a></p>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>]
+
+    <script>
+        L.mapbox.accessToken =
+            'pk.eyJ1IjoibWRjcnVzZSIsImEiOiJjanZvN25kaHQxdzAxNDhwZjM4NDNvMXV4In0.s4GSawMNB7Jo4Vf7LXKEew';
+
+        var options = {
+            center: [18.9063, -94.2792],
+            zoom: 6,
+            minZoom: 5,
+            maxZoom: 8
+        }
+        var map = L.map('map', options);
+
+
+        //var map = L.map('map').setView([18.9063, -94.2792], 6);
+
+        // Add tiles from the Mapbox Static Tiles API
+        // (https://docs.mapbox.com/api/maps/#static-tiles)
+        // Tiles are 512x512 pixels and are offset by 1 zoom level
+
+
+        L.tileLayer(
+            'https://api.mapbox.com/styles/v1/mdcruse/cl6sio9ip00c815qjuxyded6b/tiles/{z}/{x}/{y}?access_token=' +
+            L.mapbox
+            .accessToken, {
+                tileSize: 512,
+                zoomOffset: -1,
+                attribution: '© <a href="https://www.mapbox.com/contribute/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+        var altIcon_black = L.icon({
+            iconUrl: 'leaflet_circle_marker_black.png',
+            iconSize: [10, 10], // size of the icon
+            opacity: .2
+        });
+        var altIcon_red = L.icon({
+            iconUrl: 'leaflet_circle_marker_red.png',
+            iconSize: [10, 10], // size of the icon
+            opacity: .2
+        });
+
+        const api = 'aztec_cities.geojson';
+
+        async function fetchData(url) {
+            try {
+                const response = await fetch(url, {
+                    cache: "force-cache"
+                });
+                const data = await response.json();
+                return data;
+            } catch (err) {
+                console.error(err);
+            }
+
+        };
+        fetchData(api)
+            .then(data => {
+                var marker = L.geoJson(data, {
+                    pointToLayer: function (geoJsonPoint, latlng) {
+                        return L.marker(latlng, {
+                            icon: altIcon_black,
+                        });
+                    },
+                    onEachFeature(feature, layer) {
+                        layer.bindTooltip("<div style=padding:1px 3px 1px 3px'><b>" + feature.properties
+                            .city + "</b>", {
+                                permanent: true,
+                                className: "my-labels",
+                                opacity: 0.7
+                            }).openTooltip();
+
+                        //layer.bindPopup(feature.properties.description);
+                        layer.bindPopup(feature.properties.description);
+
+                        layer.on('mouseover', function (e) {
+                            $('#text-' + feature.properties.city).addClass('highlight');
+                            //console.log(e);
+                            e.target.setIcon(altIcon_red)
+                            this.openPopup();
+                        });
+                        layer.on('mouseout', function (e) {
+                            e.target.setIcon(altIcon_black)
+                            this.closePopup();
+                        });
+
+                    }
+
+                }).addTo(map);
+                var featureGroup = L.featureGroup(marker)
+                    .on('mousemove', function (e) {
+                        console.log(e)
+                        e.target.setIcon(altIcon_red)
+                    }).addTo(map);
+
+                map.fitBounds(marker.getBounds(), {
+                    padding: [10, 10]
+                });
+
+            });
+    </script>
+</body>
+
+</html>
