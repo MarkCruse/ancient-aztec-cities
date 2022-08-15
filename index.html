@@ -194,7 +194,7 @@ bottom: 0;*/
     <div id="footer">
         <p style="float: left; width: 50%; text-align: left;">Map designed by:&nbsp;&nbsp;Mark Cruse </p>
         <p style="float: left; width: 50%; text-align: right;">Data source:
-            <a href="http://opendata-esri23.opendata.arcgis.com/">Esri Portland R&D Center Open Data</a></p>
+            <a href="https://en.wikipedia.org/wiki/Aztec_Empire">Wikipedia</a></p>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>]
@@ -268,40 +268,25 @@ bottom: 0;*/
                                 opacity: 0.7
                             }).openTooltip();
 
-                        //layer.bindPopup(feature.properties.description);
-                        /*                      layer.bindPopup(feature.properties.description);
-
-                                              layer.on('mouseover', function (e) {
-                                                  $('#text-' + feature.properties.city).addClass('highlight');
-                                                  //console.log(e);
-                                                  e.target.setIcon(altIcon_red)
-                                                  this.openPopup();
-                                              });
-                                              layer.on('mouseout', function (e) {
-                                                  e.target.setIcon(altIcon_black)
-                                                  this.closePopup();
-                                              }); */
-                        // Define the HTML element where you want to add text
                         const markerHoverTextEl = document.getElementById("marker-hover-text");
 
                         // Create Leaflet event listener to add text to specified HTML element on mouseover/hover and mouseout
                         layer.on({
                             mouseover: function () {
-                                markerHoverTextEl.innerText = feature.properties.description
+                                markerHoverTextEl.innerText = feature.properties
+                                    .description
                             },
                             mouseout: function () {
                                 markerHoverTextEl.innerText = ""
+                            },
+                            mousemove: function (e) {
+                                e.target.setIcon(altIcon_red)
                             }
                         });
                     }
 
 
                 }).addTo(map);
-                var featureGroup = L.featureGroup(marker)
-                    .on('mousemove', function (e) {
-                        console.log(e)
-                        e.target.setIcon(altIcon_red)
-                    }).addTo(map);
 
                 map.fitBounds(marker.getBounds(), {
                     padding: [10, 10]
